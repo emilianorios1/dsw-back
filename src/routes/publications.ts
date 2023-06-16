@@ -8,5 +8,12 @@ router.get('/publications', async (req,res) => {
   res.send(publications)
 })
 
+router.post('/publications', async(req, res) =>{
+  const publication = await prisma.user.create({
+    data: req.body
+  })
+  res.send(publication)
+})
+
 
 export default router;
