@@ -11,6 +11,6 @@ app.use('/api', publicationsRoutes);
 app.use('/api', categoriesRoutes);
 
 
-app.listen(process.env.port)
-console.log('Server on port ', process.env.port)
+app.listen(5000)
+console.log('Server on port ', 5000)
 
