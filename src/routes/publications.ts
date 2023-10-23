@@ -8,12 +8,16 @@ router.get('/publications', async (req,res) => {
   res.send(publications)
 })
 
-router.post('/publications', async(req, res) =>{
-  const publication = await prisma.user.create({
-    data: req.body
-  })
-  res.send(publication)
-})
-
+router.post('/publications', async (req, res) => {
+  try {
+    const publication = await prisma.publication.create({
+      data: req.body
+    });
+    res.send(publication);
+  } catch (error) {
+    // Handle the error here, for example, you can send an error response to the client.
+    res.status(500).send({ error: 'An error occurred while creating the publication.' });
+  }
+});
 
 export default router;
