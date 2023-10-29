@@ -118,6 +118,7 @@ router.delete('/cars/:id', async (req, res) => {
     if (!existingCar) {
       return res.status(404).json({ message: 'Car not found' });
     }
+    
 
     // If the car exists, delete it
     await prisma.car.delete({

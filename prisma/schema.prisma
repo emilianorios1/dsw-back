@@ -51,6 +51,19 @@ model Car {
   createdAt DateTime @default(now())
 }
 
+model Brand{
+  id        Int @id @default(autoincrement())
+  name      String @unique
+  models    Model[]
+}
+
+model Model {
+  id        Int @id @default(autoincrement())
+  name      String @unique
+  brandId   Int
+  brand     Brand @relation(fields: [brandId], references: [id])
+}
+
 model House {
   id        Int      @id @default(autoincrement())
   address   String
