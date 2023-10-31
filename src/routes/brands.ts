@@ -8,13 +8,11 @@ router.get('/brands', async (req,res) => {
     const brands = await prisma.brand.findMany()
     res.send(brands)
 } catch (error) {
-  console.error('Error finding Car Models:', error);
-
+  console.error('Error finding Brands:', error);
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     // Handle known Prisma errors
     return res.status(400).json({ error: error.message });
   }
-
   // Handle other errors
   res.status(500).json({ error: 'Internal server error' });
 }
@@ -27,7 +25,7 @@ router.get('/brands/:id', async (req,res) => {
     });
     res.send(brand)
 } catch (error) {
-  console.error('Error finding Car Models:', error);
+  console.error('Error finding Brands:', error);
 
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     // Handle known Prisma errors
@@ -129,31 +127,31 @@ router.delete('/brands/:id', async (req, res) => {
     });
 
     if (!existingbrand) {
-      return res.status(404).json({ message: 'Brand not found' });
+      return res.status(404).json({ error: 'Brand not found' });
     }
 
-    const dependantCarModels = await prisma.carModel.findMany({
+    const dependantCarModel = await prisma.carModel.findMany({
+      where: {brandId: brandId}
+    })
+    console.log(dependantCarModel)
+    if (dependantCarModel.length > 0) {
+      return res.status(404).json({ error: 'Please delete dependant car models before deleting this brand.'})
+    }
+
+    const dependantPlaneModel = await prisma.planeModel.findMany({
       where: {brandId: brandId}
     })
 
-    if (dependantCarModels) {
-      return res.status(404).json({ message: 'Please delete dependant car models before deleting this brand.'})
-    }
-
-    const dependantPlane = await prisma.planeModel.findMany({
-      where: {brandId: brandId}
-    })
-
-    if (dependantPlane) {
-      return res.status(404).json({ message: 'Please delete dependant plane models before deleting this brand.'})
+    if (dependantPlaneModel.length > 0) {
+      return res.status(404).json({ error: 'Please delete dependant plane models before deleting this brand.'})
     }
 
     const dependantBoatModel = await prisma.boatModel.findMany({
       where: {brandId: brandId}
     })
 
-    if (dependantPlane) {
-      return res.status(404).json({ message: 'Please delete dependant boat models before deleting this brand.'})
+    if (dependantBoatModel.length > 0) {
+      return res.status(404).json({ error: 'Please delete dependant boat models before deleting this brand.'})
     }
 
     // If the brand exists, delete it

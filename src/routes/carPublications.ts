@@ -96,7 +96,7 @@ router.delete('/carPublications/:id', async (req, res) => {
     });
 
     if (!existingcarPublication) {
-      return res.status(404).json({ message: 'Car Publication not found' });
+      return res.status(404).json({ error: 'Car Publication not found' });
     }
 
     // If the carPublication exists, delete it
@@ -110,7 +110,7 @@ router.delete('/carPublications/:id', async (req, res) => {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       return res.status(400).json({ error: error.message });
     }
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

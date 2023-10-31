@@ -10,17 +10,9 @@ datasource db {
 model Brand {
   id   Int    @id @default(autoincrement())
   name String @unique
-  type VehicleType
   cars CarModel[]
-  planes PlaneModel []
-  boats BoatModel []
-}
-
-enum VehicleType {
-  CAR
-  PLANE
-  BOAT
-  // Add other vehicle types as needed
+  planes PlaneModel[]
+  boats BoatModel[]
 }
 
 model CarModel {
@@ -29,7 +21,6 @@ model CarModel {
   brand        Brand @relation(fields: [brandId], references: [id])
   brandId      Int
   year         Int
-  type         VehicleType
   // Car-specific attributes
   engineSize   Float
   numberOfDoors Int
@@ -42,7 +33,6 @@ model PlaneModel {
   brand        Brand @relation(fields: [brandId], references: [id])
   brandId      Int
   year         Int
-  type         VehicleType
   // Plane-specific attributes
   wingspan     Float
   maxAltitude  Float
@@ -55,7 +45,6 @@ model BoatModel {
   brand        Brand @relation(fields: [brandId], references: [id])
   brandId      Int
   year         Int
-  type         VehicleType
   // Boat-specific attributes
   lengthInFeet Float
   beamInFeet   Float
@@ -70,6 +59,8 @@ model CarPublication {
   mileage  Float
   // Car-specific publication attributes
   price    Float
+  transmission String
+  imageUrl String
 }
 
 model PlanePublication {
@@ -79,6 +70,7 @@ model PlanePublication {
   mileage     Float
   // Plane-specific publication attributes
   fuelCapacity Float
+  imageUrl String
 }
 
 model BoatPublication {
@@ -88,4 +80,5 @@ model BoatPublication {
   mileage    Float
   // Boat-specific publication attributes
   capacity   Int
+  imageUrl String
 }

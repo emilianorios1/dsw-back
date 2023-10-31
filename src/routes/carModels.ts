@@ -5,7 +5,12 @@ const prisma = new PrismaClient()
 
 router.get('/carModels', async (req,res) => {
   try {
-    const carModels = await prisma.carModel.findMany()
+    const carModels = await prisma.carModel.findMany({
+      include: {
+        brand: true, // Include the brand information
+      },
+    });
+
     res.send(carModels)
   } catch (error) {
     console.error('Error finding Car Models:', error);
@@ -18,7 +23,6 @@ router.get('/carModels', async (req,res) => {
     // Handle other errors
     res.status(500).json({ error: 'Internal server error' });
   }
-  
 })
 
 router.get('/carModels/:id', async (req,res) => {
@@ -130,7 +134,7 @@ router.delete('/carModels/:id', async (req, res) => {
     });
 
     if (!existingcarModel) {
-      return res.status(404).json({ message: 'Car Model not found' });
+      return res.status(404).json({ error: 'Car Model not found' });
     }
 
     const dependantCarPublications = await prisma.carPublication.findMany({
@@ -138,7 +142,7 @@ router.delete('/carModels/:id', async (req, res) => {
     })
 
     if (dependantCarPublications) {
-      return res.status(404).json({ message: 'Please delete dependant car publications before deleting this model.'})
+      return res.status(404).json({ error: 'Please delete dependant car publications before deleting this model.'})
     }
 
     // If the carModel exists, delete it
@@ -153,7 +157,7 @@ router.delete('/carModels/:id', async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
