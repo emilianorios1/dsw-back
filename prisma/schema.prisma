@@ -7,81 +7,85 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id           Int           @id @default(autoincrement())
-  email        String        @unique
-  password     String
-  phone        String
-  createdAt    DateTime      @default(now())
-  publications Publication[]
+model Brand {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  type VehicleType
+  cars CarModel[]
+  planes PlaneModel []
+  boats BoatModel []
 }
 
-model Publication {
+enum VehicleType {
+  CAR
+  PLANE
+  BOAT
+  // Add other vehicle types as needed
+}
+
+model CarModel {
   id           Int      @id @default(autoincrement())
-  title        String
-  description  String
-  price        Float    @default(0)
-  version      String
-  transmission String
-  year         String
-  km           String
-  fuel         String
-  createdAt    DateTime @default(now())
-  imageUrl     String
-  categoryId   Int
-  userId       Int
-  deleted      Boolean  @default(false)
-  category     Category @relation(fields: [categoryId], references: [id])
-  user         User     @relation(fields: [userId], references: [id])
-}
-
-model Category {
-  id           Int           @id @default(autoincrement())
-  name         String        @unique
-  publications Publication[]
-}
-
-model Car {
-  id        Int      @id @default(autoincrement())
-  model     String    @unique
-  manufacturer   String
-  year      Int
-  price     Float
-  color     String
-  createdAt DateTime @default(now())
-}
-
-model Brand{
-  id        Int @id @default(autoincrement())
-  name      String @unique
-  models    Model[]
-}
-
-model Model {
-  id        Int @id @default(autoincrement())
-  name      String @unique
-  brandId   Int
-  brand     Brand @relation(fields: [brandId], references: [id])
-}
-
-model House {
-  id        Int      @id @default(autoincrement())
-  address   String
-  city      String
-  bedrooms  Int
-  bathrooms Int
-  garage    Boolean
-  m2        Int
-  price     Float
-  createdAt DateTime @default(now())
-}
-
-model Plane {
-  id         Int      @id @default(autoincrement())
-  manufacturer String
+  name         String @unique
+  brand        Brand @relation(fields: [brandId], references: [id])
+  brandId      Int
   year         Int
-  model        String
-  capacity     Int
-  range       Float
-  createdAt    DateTime @default(now())
+  type         VehicleType
+  // Car-specific attributes
+  engineSize   Float
+  numberOfDoors Int
+  carPublications CarPublication[]
+}
+
+model PlaneModel {
+  id           Int      @id @default(autoincrement())
+  name         String @unique
+  brand        Brand @relation(fields: [brandId], references: [id])
+  brandId      Int
+  year         Int
+  type         VehicleType
+  // Plane-specific attributes
+  wingspan     Float
+  maxAltitude  Float
+  planePublications PlanePublication[]
+}
+
+model BoatModel {
+  id           Int      @id @default(autoincrement())
+  name         String @unique
+  brand        Brand @relation(fields: [brandId], references: [id])
+  brandId      Int
+  year         Int
+  type         VehicleType
+  // Boat-specific attributes
+  lengthInFeet Float
+  beamInFeet   Float
+  draftInFeet  Float
+  boatPublications BoatPublication[]
+}
+
+model CarPublication {
+  id       Int    @id @default(autoincrement())
+  car      CarModel    @relation(fields: [carModelId], references: [id])
+  carModelId    Int
+  mileage  Float
+  // Car-specific publication attributes
+  price    Float
+}
+
+model PlanePublication {
+  id          Int      @id @default(autoincrement())
+  plane       PlaneModel    @relation(fields: [planeModelId], references: [id])
+  planeModelId     Int
+  mileage     Float
+  // Plane-specific publication attributes
+  fuelCapacity Float
+}
+
+model BoatPublication {
+  id         Int      @id @default(autoincrement())
+  boat       BoatModel    @relation(fields: [boatModelId], references: [id])
+  boatModelId     Int
+  mileage    Float
+  // Boat-specific publication attributes
+  capacity   Int
 }

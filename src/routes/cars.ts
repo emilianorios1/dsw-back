@@ -17,33 +17,10 @@ router.get('/cars/:id', async (req, res) => {
 
 router.post('/cars', async (req, res) => {
   try {
-    // Validate and sanitize the request data
-    const { model, manufacturer, year, price, color } = req.body;
-    
-
-    if (!model) {
-      return res.status(400).json({ error: 'Model is required' });
-    }
-
-    // Check if the car with the same model already exists
-    const existingCar = await prisma.car.findUnique({
-      where: { model: model },
-    });
-
-    if (existingCar) {
-      return res.status(409).json({ error: 'Car with the same model already exists' });
-    }
 
     // Create the car
     const car = await prisma.car.create({
-      data: {
-        model: model,
-        manufacturer: manufacturer,
-        year  : year,
-        price  : price,
-        color: color,
-        // Other fields if necessary
-      }
+      data: req.body
     });
 
     // Return the created car
