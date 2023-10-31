@@ -3,12 +3,12 @@ import {Prisma, PrismaClient} from '@prisma/client';
 const router = Router();
 const prisma = new PrismaClient()
 
-router.get('/carModels', async (req,res) => {
+router.get('/planeModels', async (req,res) => {
   try {
-    const carModels = await prisma.carModel.findMany()
-    res.send(carModels)
+    const planeModels = await prisma.planeModel.findMany()
+    res.send(planeModels)
   } catch (error) {
-    console.error('Error finding Car Models:', error);
+    console.error('Error finding Plane Models:', error);
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       // Handle known Prisma errors
@@ -21,14 +21,14 @@ router.get('/carModels', async (req,res) => {
   
 })
 
-router.get('/carModels/:id', async (req,res) => {
+router.get('/planeModels/:id', async (req,res) => {
   try {
-    const carModel = await prisma.carModel.findUnique({
+    const planeModel = await prisma.planeModel.findUnique({
       where: {id: parseInt(req.params.id)}
     });
-    res.send(carModel)
+    res.send(planeModel)
   } catch (error) {
-    console.error('Error finding Car Models:', error);
+    console.error('Error finding Plane Models:', error);
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       // Handle known Prisma errors
@@ -40,29 +40,29 @@ router.get('/carModels/:id', async (req,res) => {
   }
 })
 
-router.post('/carModels', async (req, res) => {
+router.post('/planeModels', async (req, res) => {
   try {
     // Validate and sanitize the request data
     const { name } = req.body;
     
-    // Check if the carModel with the same name already exists
-    const existingcarModel = await prisma.carModel.findUnique({
+    // Check if the planeModel with the same name already exists
+    const existingplaneModel = await prisma.planeModel.findUnique({
       where: { name: name },
     });
 
-    if (existingcarModel) {
-      return res.status(409).json({ error: 'Car Model with the same name already exists' });
+    if (existingplaneModel) {
+      return res.status(409).json({ error: 'Plane Model with the same name already exists' });
     }
     
-    // Create the carModel
-    const carModel = await prisma.carModel.create({
+    // Create the planeModel
+    const planeModel = await prisma.planeModel.create({
       data: req.body
     });
 
-    // Return the created carModel
-    res.status(201).json(carModel);
+    // Return the created planeModel
+    res.status(201).json(planeModel);
   } catch (error) {
-    console.error('Error creating Car Model:', error);
+    console.error('Error creating Plane Model:', error);
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       // Handle known Prisma errors
@@ -75,41 +75,41 @@ router.post('/carModels', async (req, res) => {
 });
 
 
-router.put('/carModels/:id', async (req, res) => {
-  const carModelId = parseInt(req.params.id);
-  const updatedcarModelData = req.body;
+router.put('/planeModels/:id', async (req, res) => {
+  const planeModelId = parseInt(req.params.id);
+  const updatedplaneModelData = req.body;
 
   try {
-    const existingcarModel = await prisma.carModel.findUnique({
-      where: { id: carModelId },
+    const existingplaneModel = await prisma.planeModel.findUnique({
+      where: { id: planeModelId },
     });
 
-    if (!existingcarModel) {
-      return res.status(404).json({ error: 'Car Model not found' });
+    if (!existingplaneModel) {
+      return res.status(404).json({ error: 'Plane Model not found' });
     }
 
-    // Check if the updated name already exists in another carModel
-    if (updatedcarModelData.name) {
-      const carModelWithSameName = await prisma.carModel.findFirst({
+    // Check if the updated name already exists in another planeModel
+    if (updatedplaneModelData.name) {
+      const planeModelWithSameName = await prisma.planeModel.findFirst({
         where: {
-          NOT: { id: carModelId },
-          name: updatedcarModelData.name,
+          NOT: { id: planeModelId },
+          name: updatedplaneModelData.name,
         },
       });
 
-      if (carModelWithSameName) {
-        return res.status(409).json({ error: 'Car Model with the same name already exists' });
+      if (planeModelWithSameName) {
+        return res.status(409).json({ error: 'Plane Model with the same name already exists' });
       }
     }
 
-    const carModel = await prisma.carModel.update({
-      where: { id: carModelId },
-      data: updatedcarModelData,
+    const planeModel = await prisma.planeModel.update({
+      where: { id: planeModelId },
+      data: updatedplaneModelData,
     });
 
-    res.json(carModel); // Return the updated carModel
+    res.json(planeModel); // Return the updated planeModel
   } catch (error) {
-    console.error('Error updating Car Model:', error);
+    console.error('Error updating Plane Model:', error);
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       return res.status(400).json({ error: error.message });
@@ -120,30 +120,30 @@ router.put('/carModels/:id', async (req, res) => {
   }
 });
 
-router.delete('/carModels/:id', async (req, res) => {
-  const carModelId = parseInt(req.params.id);
+router.delete('/planeModels/:id', async (req, res) => {
+  const planeModelId = parseInt(req.params.id);
 
   try {
-    // First, check if the carModel with the specified ID exists
-    const existingcarModel = await prisma.carModel.findUnique({
-      where: { id: carModelId },
+    // First, check if the planeModel with the specified ID exists
+    const existingplaneModel = await prisma.planeModel.findUnique({
+      where: { id: planeModelId },
     });
 
-    if (!existingcarModel) {
-      return res.status(404).json({ message: 'Car Model not found' });
+    if (!existingplaneModel) {
+      return res.status(404).json({ error: 'Plane Model not found' });
     }
 
-    const dependantCarPublications = await prisma.carPublication.findMany({
-      where: {carModelId: carModelId}
+    const dependantPlanePublications = await prisma.planePublication.findMany({
+      where: {planeModelId: planeModelId}
     })
 
-    if (dependantCarPublications) {
-      return res.status(404).json({ message: 'Please delete dependant car publications before deleting this model.'})
+    if (dependantPlanePublications) {
+      return res.status(404).json({ error: 'Please delete dependant plane publications before deleting this model.'})
     }
 
-    // If the carModel exists, delete it
-    await prisma.carModel.delete({
-      where: { id: carModelId },
+    // If the planeModel exists, delete it
+    await prisma.planeModel.delete({
+      where: { id: planeModelId },
     });
 
     res.status(204).send();
@@ -153,7 +153,7 @@ router.delete('/carModels/:id', async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

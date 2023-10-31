@@ -96,7 +96,7 @@ router.delete('/boatPublications/:id', async (req, res) => {
     });
 
     if (!existingboatPublication) {
-      return res.status(404).json({ message: 'Boat Publication not found' });
+      return res.status(404).json({ error: 'Boat Publication not found' });
     }
 
     // If the boatPublication exists, delete it
@@ -110,7 +110,7 @@ router.delete('/boatPublications/:id', async (req, res) => {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       return res.status(400).json({ error: error.message });
     }
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

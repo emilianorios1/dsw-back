@@ -130,7 +130,7 @@ router.delete('/boatModels/:id', async (req, res) => {
     });
 
     if (!existingboatModel) {
-      return res.status(404).json({ message: 'Boat Model not found' });
+      return res.status(404).json({ error: 'Boat Model not found' });
     }
 
     const dependantBoatPublications = await prisma.boatPublication.findMany({
@@ -138,7 +138,7 @@ router.delete('/boatModels/:id', async (req, res) => {
     })
 
     if (dependantBoatPublications) {
-      return res.status(404).json({ message: 'Please delete dependant boat publications before deleting this model.'})
+      return res.status(404).json({ error: 'Please delete dependant boat publications before deleting this model.'})
     }
 
     // If the boatModel exists, delete it
