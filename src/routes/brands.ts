@@ -4,15 +4,39 @@ const router = Router();
 const prisma = new PrismaClient()
 
 router.get('/brands', async (req,res) => {
-  const brands = await prisma.brand.findMany()
-  res.send(brands)
+  try {
+    const brands = await prisma.brand.findMany()
+    res.send(brands)
+} catch (error) {
+  console.error('Error finding Car Models:', error);
+
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    // Handle known Prisma errors
+    return res.status(400).json({ error: error.message });
+  }
+
+  // Handle other errors
+  res.status(500).json({ error: 'Internal server error' });
+}
 })
 
 router.get('/brands/:id', async (req,res) => {
-  const brand = await prisma.brand.findUnique({
-    where: {id: parseInt(req.params.id)}
-  });
-  res.send(brand)
+  try {
+    const brand = await prisma.brand.findUnique({
+      where: {id: parseInt(req.params.id)}
+    });
+    res.send(brand)
+} catch (error) {
+  console.error('Error finding Car Models:', error);
+
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    // Handle known Prisma errors
+    return res.status(400).json({ error: error.message });
+  }
+
+  // Handle other errors
+  res.status(500).json({ error: 'Internal server error' });
+}
 })
 
 router.post('/brands', async (req, res) => {
@@ -20,25 +44,18 @@ router.post('/brands', async (req, res) => {
     // Validate and sanitize the request data
     const { name } = req.body;
     
-    if (!name) {
-      return res.status(400).json({ error: 'Name is required' });
-    }
-
     // Check if the brand with the same name already exists
     const existingbrand = await prisma.brand.findUnique({
       where: { name: name },
     });
 
     if (existingbrand) {
-      return res.status(409).json({ error: 'brand with the same name already exists' });
+      return res.status(409).json({ error: 'Brand with the same name already exists' });
     }
     
     // Create the brand
     const brand = await prisma.brand.create({
-      data: {
-        name: name,
-        // Other fields if necessary
-      }
+      data: req.body
     });
 
     // Return the created brand
@@ -67,7 +84,7 @@ router.put('/brands/:id', async (req, res) => {
     });
 
     if (!existingbrand) {
-      return res.status(404).json({ error: 'brand not found' });
+      return res.status(404).json({ error: 'Brand not found' });
     }
 
     // Check if the updated name already exists in another brand
@@ -80,7 +97,7 @@ router.put('/brands/:id', async (req, res) => {
       });
 
       if (brandWithSameName) {
-        return res.status(409).json({ error: 'brand with the same name already exists' });
+        return res.status(409).json({ error: 'Brand with the same name already exists' });
       }
     }
 
@@ -112,14 +129,32 @@ router.delete('/brands/:id', async (req, res) => {
     });
 
     if (!existingbrand) {
-      return res.status(404).json({ message: 'brand not found' });
+      return res.status(404).json({ message: 'Brand not found' });
     }
 
-    await prisma.model.deleteMany({
-        where: {
-          brandId: brandId
-        }
-      })
+    const dependantCarModels = await prisma.carModel.findMany({
+      where: {brandId: brandId}
+    })
+
+    if (dependantCarModels) {
+      return res.status(404).json({ message: 'Please delete dependant car models before deleting this brand.'})
+    }
+
+    const dependantPlane = await prisma.planeModel.findMany({
+      where: {brandId: brandId}
+    })
+
+    if (dependantPlane) {
+      return res.status(404).json({ message: 'Please delete dependant plane models before deleting this brand.'})
+    }
+
+    const dependantBoatModel = await prisma.boatModel.findMany({
+      where: {brandId: brandId}
+    })
+
+    if (dependantPlane) {
+      return res.status(404).json({ message: 'Please delete dependant boat models before deleting this brand.'})
+    }
 
     // If the brand exists, delete it
     await prisma.brand.delete({
