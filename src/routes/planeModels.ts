@@ -137,7 +137,7 @@ router.delete('/planeModels/:id', async (req, res) => {
       where: {planeModelId: planeModelId}
     })
 
-    if (dependantPlanePublications) {
+    if (dependantPlanePublications.length > 0) {
       return res.status(404).json({ error: 'Please delete dependant plane publications before deleting this model.'})
     }
 

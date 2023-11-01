@@ -141,7 +141,7 @@ router.delete('/carModels/:id', async (req, res) => {
       where: {carModelId: carModelId}
     })
 
-    if (dependantCarPublications) {
+    if (dependantCarPublications.length > 0) {
       return res.status(404).json({ error: 'Please delete dependant car publications before deleting this model.'})
     }
 
