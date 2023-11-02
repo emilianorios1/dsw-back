@@ -62,6 +62,7 @@ model CarPublication {
   transmission String
   imageUrl String
   description String
+  contactNumber String
 }
 
 model PlanePublication {
@@ -72,6 +73,7 @@ model PlanePublication {
   // Plane-specific publication attributes
   fuelCapacity Float
   imageUrl String
+  contactNumber String
 }
 
 model BoatPublication {
@@ -83,4 +85,5 @@ model BoatPublication {
   // Boat-specific publication attributes
   capacity   Int
   imageUrl String
+  contactNumber String
 }
