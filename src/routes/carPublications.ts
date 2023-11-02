@@ -5,7 +5,15 @@ const prisma = new PrismaClient()
 
 router.get('/carPublications', async (req,res) => {
   try {
-    const carPublications = await prisma.carPublication.findMany()
+    const carPublications = await prisma.carPublication.findMany({
+      include:{
+        carModel: {
+          include:{
+            brand: true
+          }
+        },
+      }
+    })
     res.send(carPublications)
   } catch (error) {
     console.error('Error finding Car Publications:', error);

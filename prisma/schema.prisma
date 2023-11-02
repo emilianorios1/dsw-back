@@ -53,7 +53,7 @@ model BoatModel {
 
 model CarPublication {
   id       Int    @id @default(autoincrement())
-  car      CarModel    @relation(fields: [carModelId], references: [id])
+  carModel      CarModel    @relation(fields: [carModelId], references: [id])
   carModelId    Int
   mileage  Float
   year     Int
@@ -61,11 +61,12 @@ model CarPublication {
   price    Float
   transmission String
   imageUrl String
+  description String
 }
 
 model PlanePublication {
   id          Int      @id @default(autoincrement())
-  plane       PlaneModel    @relation(fields: [planeModelId], references: [id])
+  planeModel       PlaneModel    @relation(fields: [planeModelId], references: [id])
   planeModelId     Int
   year     Int
   // Plane-specific publication attributes
@@ -75,7 +76,7 @@ model PlanePublication {
 
 model BoatPublication {
   id         Int      @id @default(autoincrement())
-  boat       BoatModel    @relation(fields: [boatModelId], references: [id])
+  boatModel       BoatModel    @relation(fields: [boatModelId], references: [id])
   boatModelId     Int
   mileage    Float
   year     Int
