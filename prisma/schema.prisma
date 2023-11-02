@@ -45,9 +45,8 @@ model BoatModel {
   brand        Brand @relation(fields: [brandId], references: [id])
   brandId      Int
   // Boat-specific attributes
-  lengthInFeet Float
-  beamInFeet   Float
-  draftInFeet  Float
+  engineSize Int
+  isOutboard   Boolean
   boatPublications BoatPublication[]
 }
 
@@ -80,10 +79,12 @@ model BoatPublication {
   id         Int      @id @default(autoincrement())
   boatModel       BoatModel    @relation(fields: [boatModelId], references: [id])
   boatModelId     Int
-  mileage    Float
   year     Int
   // Boat-specific publication attributes
   capacity   Int
+  boatType String
+  haveTrailer Boolean
+  maxWeight Float
   imageUrl String
   contactNumber String
 }
