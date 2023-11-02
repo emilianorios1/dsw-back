@@ -46,7 +46,7 @@ model BoatModel {
   brandId      Int
   // Boat-specific attributes
   engineSize Int
-  isOutboard   Boolean
+  isOutboard   String
   boatPublications BoatPublication[]
 }
 
@@ -80,11 +80,13 @@ model BoatPublication {
   boatModel       BoatModel    @relation(fields: [boatModelId], references: [id])
   boatModelId     Int
   year     Int
+  price    Float
   // Boat-specific publication attributes
   capacity   Int
   boatType String
-  haveTrailer Boolean
+  haveTrailer String
   maxWeight Float
   imageUrl String
+  description String
   contactNumber String
 }
