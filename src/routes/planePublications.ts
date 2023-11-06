@@ -5,10 +5,18 @@ const prisma = new PrismaClient()
 
 router.get('/planePublications', async (req,res) => {
   try {
-    const planePublications = await prisma.planePublication.findMany()
+    const planePublications = await prisma.planePublication.findMany({
+      include:{
+        planeModel: {
+          include:{
+            brand: true
+          }
+        },
+      }
+    })
     res.send(planePublications)
   } catch (error) {
-    console.error('Error finding Plane Publications:', error);
+    console.error('Error finding plane Publications:', error);
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       // Handle known Prisma errors
@@ -28,7 +36,7 @@ router.get('/planePublications/:id', async (req,res) => {
     });
     res.send(planePublication)
   } catch (error) {
-    console.error('Error finding Plane Publications:', error);
+    console.error('Error finding plane Publications:', error);
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       // Handle known Prisma errors
@@ -50,7 +58,7 @@ router.post('/planePublications', async (req, res) => {
     // Return the created planePublication
     res.status(201).json(planePublication);
   } catch (error) {
-    console.error('Error creating Plane Publication:', error);
+    console.error('Error creating plane Publication:', error);
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       // Handle known Prisma errors
@@ -65,17 +73,17 @@ router.post('/planePublications', async (req, res) => {
 
 router.put('/planePublications/:id', async (req, res) => {
   const planePublicationId = parseInt(req.params.id);
-  const updatedPlanePublicationData = req.body;
+  const updatedplanePublicationData = req.body;
 
   try {
     const planePublication = await prisma.planePublication.update({
       where: { id: planePublicationId },
-      data: updatedPlanePublicationData,
+      data: updatedplanePublicationData,
     });
 
     res.json(planePublication); // Return the updated planePublication
   } catch (error) {
-    console.error('Error updating Plane Publication:', error);
+    console.error('Error updating plane Publication:', error);
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       return res.status(400).json({ error: error.message });
@@ -96,7 +104,7 @@ router.delete('/planePublications/:id', async (req, res) => {
     });
 
     if (!existingplanePublication) {
-      return res.status(404).json({ error: 'Plane Publication not found' });
+      return res.status(404).json({ error: 'plane Publication not found' });
     }
 
     // If the planePublication exists, delete it

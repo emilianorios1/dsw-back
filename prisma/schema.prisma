@@ -74,6 +74,8 @@ model PlanePublication {
   fuelCapacity Float
   imageUrl String
   contactNumber String
+  description String
+  flighthours Float
 }
 
 model BoatPublication {

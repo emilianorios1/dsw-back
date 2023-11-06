@@ -5,7 +5,12 @@ const prisma = new PrismaClient()
 
 router.get('/planeModels', async (req,res) => {
   try {
-    const planeModels = await prisma.planeModel.findMany()
+    const planeModels = await prisma.planeModel.findMany(
+      {include: {
+      brand: true, // Include the brand information
+    },
+    }
+  )
     res.send(planeModels)
   } catch (error) {
     console.error('Error finding Plane Models:', error);

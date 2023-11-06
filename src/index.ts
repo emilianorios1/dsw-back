@@ -6,7 +6,7 @@ import boatPublications from './routes/boatPublications'
 import carModels from './routes/carModels'
 import carPublications from './routes/carPublications'
 import planeModels from './routes/planeModels'
-import planePublications from './routes/boatPublications'
+import planePublications from './routes/planePublications'
 
 const app = express()
 app.use(express.json())
