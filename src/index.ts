@@ -7,6 +7,8 @@ import carModels from './routes/carModels'
 import carPublications from './routes/carPublications'
 import planeModels from './routes/planeModels'
 import planePublications from './routes/planePublications'
+import { checkJwt } from './middleware/middleware';
+
 
 const app = express()
 app.use(express.json())
