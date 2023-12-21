@@ -7,25 +7,24 @@ import carModels from './routes/carModels'
 import carPublications from './routes/carPublications'
 import planeModels from './routes/planeModels'
 import planePublications from './routes/planePublications'
-import { auth, claimIncludes, requiredScopes } from 'express-oauth2-jwt-bearer'
+import { auth, claimIncludes } from 'express-oauth2-jwt-bearer'
 
-const checkAuth = auth({
-  audience: process.env.AUTH0_AUDIENCE,
-  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL
-});
+
+const checkAuth = auth({})
 const checkAdmin = claimIncludes('permissions', 'admin')
 
 const app = express()
+
 app.use(express.json())
 app.use(cors())
 
-app.use('/api', checkAuth, checkAdmin, brands);
-app.use('/api', checkAuth, checkAdmin, boatModels);
-app.use('/api', boatPublications);
-app.use('/api', checkAuth, checkAdmin, carModels);
-app.use('/api', carPublications)
-app.use('/api', checkAuth, checkAdmin, planeModels)
-app.use('/api', planePublications)
+app.use('/api/brands', checkAuth, checkAdmin, brands);
+app.use('/api/boatModels', checkAuth, checkAdmin, boatModels);
+app.use('/api/boatPublications', boatPublications);
+app.use('/api/carModels', checkAuth, checkAdmin, carModels);
+app.use('/api/carPublications', carPublications)
+app.use('/api/planeModels', checkAuth, checkAdmin, planeModels)
+app.use('/api/planePublications', planePublications)
 
 
 app.listen(5000)

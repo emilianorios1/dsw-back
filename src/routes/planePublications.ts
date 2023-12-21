@@ -3,7 +3,7 @@ import {Prisma, PrismaClient} from '@prisma/client';
 const router = Router();
 const prisma = new PrismaClient()
 
-router.get('/planePublications', async (req,res) => {
+router.get('', async (req,res) => {
   try {
     const planePublications = await prisma.planePublication.findMany({
       include:{
@@ -29,7 +29,7 @@ router.get('/planePublications', async (req,res) => {
   
 })
 
-router.get('/planePublications/:id', async (req,res) => {
+router.get('/:id', async (req,res) => {
   try {
     const planePublication = await prisma.planePublication.findUnique({
       where: {id: parseInt(req.params.id)}
@@ -48,7 +48,7 @@ router.get('/planePublications/:id', async (req,res) => {
   }
 })
 
-router.post('/planePublications', async (req, res) => {
+router.post('', async (req, res) => {
   try {
     // Create the planePublication
     const planePublication = await prisma.planePublication.create({
@@ -71,7 +71,7 @@ router.post('/planePublications', async (req, res) => {
 });
 
 
-router.put('/planePublications/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   const planePublicationId = parseInt(req.params.id);
   const updatedplanePublicationData = req.body;
 
@@ -94,7 +94,7 @@ router.put('/planePublications/:id', async (req, res) => {
   }
 });
 
-router.delete('/planePublications/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const planePublicationId = parseInt(req.params.id);
 
   try {

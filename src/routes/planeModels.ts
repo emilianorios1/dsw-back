@@ -3,7 +3,7 @@ import {Prisma, PrismaClient} from '@prisma/client';
 const router = Router();
 const prisma = new PrismaClient()
 
-router.get('/planeModels', async (req,res) => {
+router.get('', async (req,res) => {
   try {
     const planeModels = await prisma.planeModel.findMany(
       {include: {
@@ -26,7 +26,7 @@ router.get('/planeModels', async (req,res) => {
   
 })
 
-router.get('/planeModels/:id', async (req,res) => {
+router.get('/:id', async (req,res) => {
   try {
     const planeModel = await prisma.planeModel.findUnique({
       where: {id: parseInt(req.params.id)}
@@ -45,7 +45,7 @@ router.get('/planeModels/:id', async (req,res) => {
   }
 })
 
-router.post('/planeModels', async (req, res) => {
+router.post('', async (req, res) => {
   try {
     // Validate and sanitize the request data
     const { name } = req.body;
@@ -80,7 +80,7 @@ router.post('/planeModels', async (req, res) => {
 });
 
 
-router.put('/planeModels/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   const planeModelId = parseInt(req.params.id);
   const updatedplaneModelData = req.body;
 
@@ -125,7 +125,7 @@ router.put('/planeModels/:id', async (req, res) => {
   }
 });
 
-router.delete('/planeModels/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const planeModelId = parseInt(req.params.id);
 
   try {

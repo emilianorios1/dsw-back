@@ -3,7 +3,7 @@ import {Prisma, PrismaClient} from '@prisma/client';
 const router = Router();
 const prisma = new PrismaClient()
 
-router.get('/brands', async (req,res) => {
+router.get('', async (req,res) => {
   try {
     const brands = await prisma.brand.findMany()
     res.send(brands)
@@ -18,7 +18,7 @@ router.get('/brands', async (req,res) => {
 }
 })
 
-router.get('/brands/:id', async (req,res) => {
+router.get('/:id', async (req,res) => {
   try {
     const brand = await prisma.brand.findUnique({
       where: {id: parseInt(req.params.id)}
@@ -37,7 +37,7 @@ router.get('/brands/:id', async (req,res) => {
 }
 })
 
-router.post('/brands', async (req, res) => {
+router.post('', async (req, res) => {
   try {
     // Validate and sanitize the request data
     const { name } = req.body;
@@ -72,7 +72,7 @@ router.post('/brands', async (req, res) => {
 });
 
 
-router.put('/brands/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   const brandId = parseInt(req.params.id);
   const updatedbrandData = req.body;
 
@@ -117,7 +117,7 @@ router.put('/brands/:id', async (req, res) => {
   }
 });
 
-router.delete('/brands/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const brandId = parseInt(req.params.id);
 
   try {
