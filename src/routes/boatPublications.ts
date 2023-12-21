@@ -3,7 +3,7 @@ import {Prisma, PrismaClient} from '@prisma/client';
 const router = Router();
 const prisma = new PrismaClient()
 
-router.get('/boatPublications', async (req,res) => {
+router.get('', async (req,res) => {
   try {
     const boatPublications = await prisma.boatPublication.findMany({
       include:{
@@ -28,7 +28,7 @@ router.get('/boatPublications', async (req,res) => {
   
 })
 
-router.get('/boatPublications/:id', async (req,res) => {
+router.get('/:id', async (req,res) => {
   try {
     const boatPublication = await prisma.boatPublication.findUnique({
       where: {id: parseInt(req.params.id)}
@@ -47,7 +47,7 @@ router.get('/boatPublications/:id', async (req,res) => {
   }
 })
 
-router.post('/boatPublications', async (req, res) => {
+router.post('', async (req, res) => {
   try {
     // Create the boatPublication
     const boatPublication = await prisma.boatPublication.create({
@@ -70,7 +70,7 @@ router.post('/boatPublications', async (req, res) => {
 });
 
 
-router.put('/boatPublications/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   const boatPublicationId = parseInt(req.params.id);
   const updatedBoatPublicationData = req.body;
 
@@ -93,7 +93,7 @@ router.put('/boatPublications/:id', async (req, res) => {
   }
 });
 
-router.delete('/boatPublications/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const boatPublicationId = parseInt(req.params.id);
 
   try {

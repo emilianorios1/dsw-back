@@ -1,9 +1,10 @@
 import {Router} from 'express';
 import {Prisma, PrismaClient} from '@prisma/client';
+import { checkAdmin, checkAuth } from '../middleware/auth';
 const router = Router();
 const prisma = new PrismaClient()
 
-router.get('/boatModels', async (req,res) => {
+router.get('', async (req,res) => {
   try {
     const boatModels = await prisma.boatModel.findMany({
       include: {
@@ -25,7 +26,7 @@ router.get('/boatModels', async (req,res) => {
   
 })
 
-router.get('/boatModels/:id', async (req,res) => {
+router.get('/:id', async (req,res) => {
   try {
     const boatModel = await prisma.boatModel.findUnique({
       where: {id: parseInt(req.params.id)}
@@ -44,7 +45,7 @@ router.get('/boatModels/:id', async (req,res) => {
   }
 })
 
-router.post('/boatModels', async (req, res) => {
+router.post('', checkAuth, checkAdmin, async (req, res) => {
   try {
     // Validate and sanitize the request data
     const { name } = req.body;
@@ -79,7 +80,7 @@ router.post('/boatModels', async (req, res) => {
 });
 
 
-router.put('/boatModels/:id', async (req, res) => {
+router.put('/:id', checkAuth, checkAdmin, async (req, res) => {
   const boatModelId = parseInt(req.params.id);
   const updatedboatModelData = req.body;
 
@@ -124,7 +125,7 @@ router.put('/boatModels/:id', async (req, res) => {
   }
 });
 
-router.delete('/boatModels/:id', async (req, res) => {
+router.delete('/:id', checkAuth, checkAdmin, async (req, res) => {
   const boatModelId = parseInt(req.params.id);
 
   try {

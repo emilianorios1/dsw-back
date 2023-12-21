@@ -3,7 +3,7 @@ import {Prisma, PrismaClient} from '@prisma/client';
 const router = Router();
 const prisma = new PrismaClient()
 
-router.get('/carPublications', async (req,res) => {
+router.get('', async (req,res) => {
   try {
     const carPublications = await prisma.carPublication.findMany({
       include:{
@@ -29,7 +29,7 @@ router.get('/carPublications', async (req,res) => {
   
 })
 
-router.get('/carPublications/:id', async (req,res) => {
+router.get('/:id', async (req,res) => {
   try {
     const carPublication = await prisma.carPublication.findUnique({
       where: {id: parseInt(req.params.id)}
@@ -48,7 +48,7 @@ router.get('/carPublications/:id', async (req,res) => {
   }
 })
 
-router.post('/carPublications', async (req, res) => {
+router.post('', async (req, res) => {
   try {
     // Create the carPublication
     const carPublication = await prisma.carPublication.create({
@@ -71,7 +71,7 @@ router.post('/carPublications', async (req, res) => {
 });
 
 
-router.put('/carPublications/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   const carPublicationId = parseInt(req.params.id);
   const updatedCarPublicationData = req.body;
 
@@ -94,7 +94,7 @@ router.put('/carPublications/:id', async (req, res) => {
   }
 });
 
-router.delete('/carPublications/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const carPublicationId = parseInt(req.params.id);
 
   try {
