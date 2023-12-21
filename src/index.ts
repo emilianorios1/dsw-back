@@ -9,7 +9,7 @@ import planeModels from './routes/planeModels'
 import planePublications from './routes/planePublications'
 import { auth, claimIncludes, requiredScopes } from 'express-oauth2-jwt-bearer'
 
-const checkJwt = auth({
+const checkAuth = auth({
   audience: process.env.AUTH0_AUDIENCE,
   issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL
 });
@@ -19,12 +19,12 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-app.use('/api', checkJwt, checkAdmin, brands);
-app.use('/api', checkJwt, checkAdmin, boatModels);
+app.use('/api', checkAuth, checkAdmin, brands);
+app.use('/api', checkAuth, checkAdmin, boatModels);
 app.use('/api', boatPublications);
-app.use('/api', checkJwt, checkAdmin, carModels);
+app.use('/api', checkAuth, checkAdmin, carModels);
 app.use('/api', carPublications)
-app.use('/api', checkJwt, checkAdmin, planeModels)
+app.use('/api', checkAuth, checkAdmin, planeModels)
 app.use('/api', planePublications)
 
 
