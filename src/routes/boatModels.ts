@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import {Prisma, PrismaClient} from '@prisma/client';
+import { checkAdmin, checkAuth } from '../middleware/auth';
 const router = Router();
 const prisma = new PrismaClient()
 
@@ -44,7 +45,7 @@ router.get('/:id', async (req,res) => {
   }
 })
 
-router.post('', async (req, res) => {
+router.post('', checkAuth, checkAdmin, async (req, res) => {
   try {
     // Validate and sanitize the request data
     const { name } = req.body;
@@ -79,7 +80,7 @@ router.post('', async (req, res) => {
 });
 
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', checkAuth, checkAdmin, async (req, res) => {
   const boatModelId = parseInt(req.params.id);
   const updatedboatModelData = req.body;
 
@@ -124,7 +125,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', checkAuth, checkAdmin, async (req, res) => {
   const boatModelId = parseInt(req.params.id);
 
   try {
